@@ -1,0 +1,6 @@
+name: DRFF-R2
+module_type: defense
+version: 0.1.0
+entrypoint: anima-drff-r2
+paper: papers/2603.00106.pdf
+status: ready_for_cuda_handoff

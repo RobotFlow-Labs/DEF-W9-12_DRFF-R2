@@ -1,0 +1,6 @@
+"""Paper-aligned constants for DRFF-R2."""
+
+PAPER_DOI = "10.57760/sciencedb.36815"
+PAPER_STFT_NFFT = 1024
+PAPER_STFT_HOP = 256
+PAPER_SAMPLE_RATE_HZ = 100_000_000

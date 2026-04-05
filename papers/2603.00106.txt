@@ -1,0 +1,872 @@
+A Multi-Scenario UAV RF Dataset with Real-World
+Acquisition and Signal Processing Benchmarking
+Haolin Zheng1 , Ning Gao∗1 , Zhenghang Zhu1 , Zhijun Huang2 ,
+Shi Jin3 , Michail Matthaiou4
+1
+
+arXiv:2603.00106v1 [eess.SP] 18 Feb 2026
+
+School of Cyber Science and Engineering, Southeast University, Nanjing
+210096, China
+2
+Chien-Shiung Wu College, Southeast University, Nanjing 210096, China
+3
+National Mobile Communications Research Laboratory, Southeast
+University, Nanjing 210096, China
+4
+Centre for Wireless Innovation (CWI), Queen’s University Belfast, Belfast
+BT3 9DT, U.K.
+∗
+Corresponding Author. Email: ninggao@seu.edu.cn
+Abstract
+We present a real-world multi-scenario unmanned aerial vehicle (UAV) radio frequency
+(RF) dataset, namely DRFF-R2, which is collected using a dedicated acquisition platform
+under diverse operational conditions. All signals are acquired within a unified framework
+to ensure consistency in hardware configuration and environmental settings. The dataset
+is systematically organized into seven well-defined subsets corresponding to different operational and signal composition scenarios to facilitate structured experimentation. Each
+file follows a clearly annotated naming convention to enable convenient data indexing and
+reproducible analysis. The dataset contains RF recordings from 26 UAV units spanning 8
+distinct models, captured across varying flight states, altitudes, speeds, acquisition days,
+and receiver configurations. By covering diverse acquisition settings and signal compositions, the dataset provides a comprehensive resource for future UAV RF signal research,
+including RF fingerprinting (RFF) identification, model-level recognition, flight state analysis, time-varying RFF study, and interference-aware signal processing.
+
+1
+
+Background & Summary
+
+The widespread adoption of low-altitude unmanned aerial vehicles (UAVs, also known as
+drones) across commercial, industrial, and civilian sectors has brought significant benefits to
+modern society. However, this rapid growth in drone deployment has also led to an increase in
+unauthorized and illegal activities, such as restricted airspace intrusion, illegal transportation,
+and privacy violations [1]. To address these concerns and ensure safe drone regulation, one
+promising approach is radio frequency fingerprinting (RFF), which leverages inherent hardware imperfections introduced during the manufacturing process [2]. Despite its potential, the
+study of drone RFF relies heavily on the extraction of unique features from drone samples,
+1
+
+which in turn depends on the availability of large and diverse datasets. Unfortunately, the lack
+of a large-scale drone radio frequency (RF) dataset presents a critical gap in this field.
+Several research teams have responded to this challenge by publishing and open-sourcing
+their independently collected drone RF datasets. One representative dataset is DroneRFa [3],
+which includes RF signals from 9 types of flying drones recorded in an outdoor environment,
+15 types recorded indoors, and 1 type of background signal for reference. Each dataset contains at least 12 segments, with more than 100 million sampling points per segment. Another
+dataset, DroneRFb [4], extended DroneRFa by focusing on non-cooperative drone control, with
+RF signal data from 6 different types of drones in an urban environment, as well as a reference
+background signal. This dataset was collected using software-defined radio (SDR) equipment
+and includes detailed annotations for individual identifiers, along with line-of-sight (LoS) or
+non-line-of-sight (NLoS) conditions. The DRFF-R1 [5] dataset comprises RF data collected
+from 20 UAVs across 7 different model types. The dataset covers various flight conditions,
+including different altitudes and velocities, and was acquired in real electromagnetic environments. It captures practical channel effects, including Doppler shifts, reflecting realistic signal
+propagation characteristics. The RFdrone dataset [6] offers approximately 1.3 TB of raw frequency data from 37 distinct drones, providing a comprehensive benchmark for drone detection
+and identification. It addresses many limitations of previous datasets by including a wide variety of drone types, large data volumes, varying signal-to-noise ratios (SNRs), and open-access
+evaluation tools. Additionally, the CardRF dataset [7] contains I/Q-baseband recordings of
+radio control and video signals from 10 consumer/prosumer drones, captured at center frequencies of 2.44 GHz and 5.8 GHz. These recordings are made in the anechoic chamber, with
+drones placed on a turntable to ensure consistent signal capture. And, this dataset also provides
+the complete hopping sequence of the control signal, and in some cases, multiple recordings for
+a single drone. These datasets represent important resources in advancing drone RFF research,
+enabling the studies of drone detection, classification, and tracking systems.
+However, research on UAV RF signals has progressed beyond the classification of single
+drones to encompass more advanced tasks, including UAV flight state awareness [8][9][10],
+drone recognition under interference conditions [11][12][13][14], and the analysis of timevarying RFF characteristics [15][16]. These emerging research directions place new demands
+on dataset design, requiring unified data acquisition under diverse operational scenarios. Although the existing datasets provide substantial data for specific scenarios, they lack widespread
+coverage of diverse drone operation scenarios and systematic investigations into the various factors influencing UAV RFF characteristics. Moreover, these requirements cannot be adequately
+addressed by simply aggregating existing datasets, as variations in acquisition hardware, UAV
+models, environmental conditions, and signal configurations introduce inconsistencies that undermine cross-task comparability and unified evaluation.
+To address these limitations, we collected and constructed UAV RF signals under diverse
+operational conditions to support a broad range of UAV RF signal research tasks, including but
+not limited to UAV individual identification, model recognition, flight state awareness, UAV RF
+signal separation and the analysis of time-varying RFF characteristics. Specifically, the dataset
+comprises RF signals from 26 UAV units spanning 8 distinct models and is systematically organized into seven well-defined subsets, each tailored to facilitate different research objectives
+and application scenarios.
+
+2
+
+2
+
+Methods
+
+The dataset was constructed through a controlled RF reception procedure comprising environmental baseline measurement, scenario-specific data collection and structured data storage.
+Data are shared under a CC-BY 4.0 license in a public repository (see Data Records section for
+details).
+
+Equipment Preparation and System Configuration
+The hardware components were configured and tested prior to data collection. The acquisition
+system consisted of the UAVs under test, RF receivers, a data storage subsystem, and auxiliary
+field equipment. As shown in Figure 1, all components were installed and operated according
+to predefined configuration settings.
+
+Laptop
+USRP
+X310
+Power
+Bank
+
+Mobile Workstation
+
+����
+
+Figure 1: Overall hardware architecture of the RF signal acquisition system, including UAVs, SDRbased receiver, data storage device, and auxiliary equipment.
+
+• UAVs: The dataset comprises eight mainstream consumer-grade DJI drone models, totaling 26 individual airframes, as summarized in Table 1. For several models, multiple units
+were considered to capture intra-model variability and enhance the diversity of devicelevel RF fingerprint characteristics within the dataset.
+Table 1: Drone platforms included in the dataset
+
+Manufacturer
+Model
+DJI
+Mini 5 Pro
+DJI
+Mini 4 Pro
+DJI
+Mini 3 Pro
+DJI
+Mavic 3
+DJI
+Mavic 3C
+DJI
+Mavic Air 3S
+DJI
+Mavic Air 2S
+DJI
+Mavic Air 2
+Total
+8 Models
+
+Quantity
+1
+5
+2
+1
+1
+1
+7
+8
+26 Units
+
+• RF Receiver: RF signal acquisition was performed using SDR receivers consisting of
+two Ettus Research universal software radio peripheral (USRP) 2943 devices. The receivers support wide instantaneous bandwidth and high-rate streaming. Prior to each
+3
+
+acquisition session, device connectivity was checked, clock synchronization was configured, and acquisition parameters were confirmed to match predefined settings. Baseband
+signals were recorded under fixed hardware and configuration conditions.
+• Data Storage Subsystem: The SDR receivers were connected to a Windows 11 laptop
+equipped with 16GB RAM and a 2TB external storage device. Prior to each acquisition
+session, buffer allocation and disk write performance were tested under the configured
+sampling conditions. System resource utilization was monitored during recording.
+• Auxiliary Filed Equipment: A dual-band omnidirectional antenna with a gain of 5 dBi
+was used for RF signal reception. Antenna orientation, mounting height, and spatial
+position relative to the UAV flight path were kept constant across acquisition sessions.
+For outdoor experiments, the acquisition system was deployed on a mobile workstation
+platform and powered by portable battery units. The power supply configuration was
+maintained consistently during field measurements.
+• Acquisition Software and Streaming Implementation: Data acquisition was controlled
+using Python scripts developed on top of the UHD driver framework. All signal labels and associated metadata fields were predefined within the acquisition scripts and
+loaded automatically during recording (see Data Records section for details). Label information was written to file headers together with the corresponding signal segments.
+The acquisition program is publicly available at https://doi.org/10.57760/
+sciencedb.36815.
+During signal acquisition, the sampling rate was fixed at Fs = 100 MS/s. Each acquisition segment contains approximately 1.4 × 108 complex I/Q samples. Moreover, the
+center frequency was configured according to the experimental scenario. For outdoor signal acquisition, a center frequency of 5.745 GHz was used. For indoor WiFi-interference
+signal acquisition, the center frequency was set to 2.437 GHz.
+
+Scenario Design
+Data was collected across multiple operational scenarios to capture realistic propagation dynamics and interference conditions:
+1. Ambient Noise Scenario: Prior to UAV activation, background RF signals were recorded
+to characterize the baseline electromagnetic environment. These recordings serve as reference data for spectrum occupancy analysis, noise power estimation, and SNR assessment.
+2. Controlled Propagation Scenario: Signal collection was conducted inside an enclosure
+lined with RF absorbing material. This configuration was used to constrain multipath
+propagation and external interference, thereby emulating a quasi free-space transmission
+condition. The recorded samples correspond to RF emissions captured under reduced
+environmental channel variability.
+3. Outdoor Flight Scenarios: Controlled flight maneuvers were performed at predefined
+distances (e.g., 50 m horizontal separation from the receiver) and altitudes (10 m, 30 m,
+
+4
+
+and 50 m). The operational states included hovering, straight-line motion, curved trajectories, takeoff, and landing. These configurations introduce realistic propagation dynamics, including time-varying path loss, Doppler shifts due to platform motion, and
+multipath effects caused by surrounding structures and terrain.
+4. Indoor Interference Scenarios: Signal collection was conducted in enclosed indoor environments with active WiFi traffic in the 2.4 GHz band. The UAV operated within the
+same frequency range, resulting in co-channel and adjacent-channel interference conditions. The recorded samples therefore reflect RF emissions captured under spectrally
+congested indoor environments.
+5. Multi-Drone Mixed Scenarios: Multiple UAVs were operated simultaneously within
+the same frequency band during data collection. Concurrent transmissions resulted in
+partial or complete spectral overlap, time-varying power levels, and composite signal superposition at the receiver. The recorded samples therefore contain mixed RF emissions
+from multiple transmitters captured under shared-spectrum conditions.
+
+Signal Acquisition Procedure
+As illustrated in Figure 2, all data collection sessions followed a predefined acquisition workflow covering UAV operation, SDR configuration, and data recording.
+The UAV operators were responsible for drone operation and flight-state control. Prior to
+recording, the UAV was powered in proximity to the receiving antenna, and a communication
+link was established via a calibrated remote controller or the official mobile application. Once
+connected, telemetry status, GPS positioning, video transmission quality, and battery level were
+directly monitored through the application interface to confirm stable operating conditions.
+The operators executed predefined UAV flight states, including hovering, linear motion, curved
+trajectories, takeoff, and landing, at specified distances and altitudes according to the scenario
+configuration.
+The acquisition program operator was responsible for SDR configuration and data saving.
+The acquisition workstation was initialized, and the USRP device was connected and configured by using the UHD-based Python program. Key parameters, including sampling rate, center
+frequency, and receiver gain, were set according to the designated scenario and fixed prior to
+recording. During acquisition, signal quality indicators were monitored in real time to identify
+abnormal interference or instability. Upon completion of the current acquisition procedure,
+the recorded data file was saved using a structured naming convention embedding essential
+metadata, after which the workflow proceeded to the next predefined acquisition procedure.
+
+3
+
+Data Records
+
+The dataset is publicly hosted on the Science Data Bank platform at https://doi.org/
+10.57760/sciencedb.36815. This dataset is distributed under the Creative Commons
+Attribution 4.0 International (CC BY 4.0) license (https://creativecommons.org/
+licenses/by/4.0/legalcode). It consists of seven directories, each containing distinct
+UAV RF signal data:
+• dataset1-single drone states: This directory contains RF signal data captured from a single drone in various operational states, including Cruise, TakeOff, Ascend, Descend, Landing, and Shading.
+5
+
+Troubleshoot /
+Adjust
+
+Start UAV Ops
+
+Start Acquisition Ops
+
+Power on UAV near receiving
+antenna
+
+Initialize Acquisition Workstation
+
+Establish communication link
+(Remote Controller / App)
+
+Connect and Configure USRP
+Device
+
+Monitor Status via App Interface
+(Telemetry, GPS, Video, Battery)
+
+Set Key Parameters FIXED Prior to
+Recording
+
+No
+
+Acquisition System Ready
+
+Stable operating
+conditions confirmed?
+
+Coordination
+
+Yes
+
+UAV Ready
+
+Coordination
+
+Start Data Recording
+
+Start
+Collection
+
+Monitor Signal Quality Indicators
+in Real Time
+
+Execute Predefined Flying States
+Maintain Specified Distances and
+Altitudes
+
+No
+
+Signal Quality Normal?
+
+Yes
+No
+
+Recording in progress...
+Wait for completion
+
+Current procedure completed?
+
+Stop Recording
+
+Yes
+UAV Landing
+
+Identify/Flag
+Instability
+
+Acquisition Operator
+(SDR Configuration Program & Data Logging)
+
+UAV Operator
+(Drone Operation & Flight-State Control)
+
+UAV RF Signal Acquisition Workflow
+
+Coordination
+
+End
+Collection
+
+Save Data File
+
+Proceed to Next
+Procedure?
+
+Yes
+
+No
+Workflow Complete
+
+Figure 2: Standardized signal acquisition flowchart.
+
+• dataset2-drone mixed: This directory includes several subdirectories, each containing mixed RF signal data from two or three drones flying simultaneously. For example, the subdirectory mavic air2s 2 & mavic air2s 3 contains signals from two
+individual Mavic Air 2S drones.
+• dataset3-single drone hover: This directory provides data from different drones
+hovering at various times (e.g., Day 1, Day 2, Day 3). It also includes data captured from
+the same drone under different conditions, such as hovering data collected by different
+USRPs.
+• dataset4-single drone dual frequency: This directory contains RF signal
+data collected when the drone is operating in frequency hopping mode. RF signals outside this directory are assumed to be captured without frequency hopping enabled.
+• dataset5-single drone inside absorbent cotton: This directory contains
+RF signal data from a drone wrapped in absorbent cotton, designed to minimize external environmental influences, thus providing cleaner drone RF signals. Additionally, the directory contains subdirectory labeled dual frequency 5.745&2.437
+and single frequency 5.745, representing the drone’s signals captured with and
+without frequency hopping, respectively.
+• dataset6-wifi mixed: This directory contains RF data captured from a drone
+while its signals are mixed with Wi-Fi signals, enabling the study of drone signal performance in the presence of Wi-Fi interference.
+6
+
+• dataset7-environment: This directory contains environmental signal data captured prior to drone RF signal collection, providing context for external factors that might
+affect the drone’s signal.
+The drone RF signal data are stored in MAT format. To better organize and store the UAV
+RF signal data, we have clearly annotated the naming format for each file. Specifically, consider
+the file name mavic3 1 Ascend c17 u1 d2.mat:
+• mavic3 1: Indicates the first UAV instance of the MAVIC 3 model.
+• Ascend: Represents the current flight state of the drone.
+• c*: Refers to a combination of the drone’s flight mode, speed, and state. Since the
+combinations vary across different dataset dictionaries, we have provided detailed information about these combinations in Table 2 for reference.
+• u*: Denotes the USRP number used for collecting the signal.
+• d*: Indicates the day on which the signal was captured.
+Table 2: Description of UAV RF signal datasets and flight parameters
+
+Dataset
+
+Dataset 1
+
+Label
+
+Alt. (m)
+
+Speed (m/s)
+
+Flight Maneuver
+
+Lat. Dist. (m)
+
+State
+
+c1
+c2
+c3
+c4
+c5
+c6
+c7
+c8
+c9
+c10
+c11
+c12
+c13
+c14
+c15
+c16
+c17
+c18
+c20
+c21
+c22
+c23
+c24
+c25
+
+10
+10
+30
+30
+50
+50
+10
+10
+30
+30
+50
+50
+10
+30
+50
+0→3
+3 → 50
+3 → 50
+50 → 3
+50 → 3
+3→0
+10
+30
+50
+
+0-5
+5-10
+0-5
+5-10
+0-5
+5-10
+0-5
+5-10
+0-5
+5-10
+0-5
+5-10
+0
+0
+0
+0-3
+0-5
+5-10
+0-5
+5-10
+0-3
+0
+0
+0
+
+Linear Flight
+Linear Flight
+Linear Flight
+Linear Flight
+Linear Flight
+Linear Flight
+Curved Flight
+Curved Flight
+Curved Flight
+Curved Flight
+Curved Flight
+Curved Flight
+Hovering (Video)
+Hovering (Video)
+Hovering (Video)
+Take-off
+Ascent
+Ascent
+Descent
+Descent
+Landing
+Hovering (Occluded)
+Hovering (Occluded)
+Hovering (Occluded)
+
+50
+50
+50
+50
+50
+50
+50
+50
+50
+50
+50
+50
+30
+30
+30
+30
+30
+30
+30
+30
+30
+
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+TakeOff
+Ascend
+Ascend
+Descend
+Descend
+Landing
+Shading
+Shading
+Shading
+
+Continued on next page
+
+7
+
+Table 2 - continued from previous page
+Dataset
+
+Label
+
+Alt. (m)
+
+Speed (m/s)
+
+Flight Maneuver
+
+Lat. Dist. (m)
+
+State
+
+c26
+
+Mixed
+
+0-5
+
+Linear (Occluded)
+
+50
+
+Shading
+
+Dataset 2
+
+c1
+c2
+c3
+c10
+c11
+c12
+c13
+c14
+c15
+
+10
+10
+30
+10
+10
+30
+30
+50
+50
+
+0
+0
+0
+0-5
+5-10
+0-5
+5-10
+0-5
+5-10
+
+Hovering
+Hovering
+Hovering
+Co-directional
+Co-directional
+Co-directional
+Co-directional
+Co-directional
+Co-directional
+
+3
+3
+3
+50
+50
+50
+50
+50
+50
+
+Hover
+Hover
+Hover
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+Cruise
+
+Dataset
+3-5
+
+c1
+c2
+c3
+
+10
+10
+30
+
+0
+0
+0
+
+Hovering
+Hovering
+Hovering
+
+3
+3
+3
+
+Hover
+Hover
+Hover
+
+Dataset 6
+
+c1
+c2
+c4
+c6
+
+5
+10
+5
+10
+
+0
+0
+0-5
+0-5
+
+Hovering
+Hovering
+Linear Flight
+Linear Flight
+
+3
+3
+50
+50
+
+Hover
+Hover
+Cruise
+Cruise
+
+Note: Lat. Dist. = Lateral Distance to Receiver; Alt. = Altitude.
+
+This structured naming convention enables efficient indexing, retrieval, and organization of
+UAV RF data. Each filename encodes key metadata, including UAV model, operational state,
+acquisition scenario, and timestamp, thereby ensuring clear traceability across recording sessions. In addition to filename-level metadata, each data file contains a fixed internal structure
+with predefined variables as summarized in Table 3.
+Table 3: Internal data structure of each acquisition file
+
+Variable Name
+RF0 I
+
+Description
+In-phase (I) component of the received signal
+
+RF0 Q
+
+Quadrature (Q) component of the received signal
+
+Fs
+
+Sampling rate (Hz)
+
+CenterFrequence
+
+Center frequency (Hz)
+
+Gain
+
+Receiver gain (dB)
+
+State
+
+UAV operational state label (e.g., hovering)
+
+Distance
+
+Horizontal distance between the UAV and the receiver
+
+Height
+
+Flight altitude at the time of signal recording
+
+FlightMode
+
+Description of the UAV flight mode
+
+8
+
+4
+
+Technical Validation
+
+In this section, we conduct a set of simple yet representative characterizations to demonstrate
+the quality, consistency, and usability of the collected UAV RF signals.
+
+Time-Frequency Representation of RF Signals
+To examine the time-frequency characteristics under different acquisition conditions, representative samples from dataset-2, dataset-3, and dataset-6 were selected for analysis. Short-time
+Fourier transform (STFT) representations were computed for the corresponding RF signal segments.
+Let x[n] denote the discrete-time complex baseband I/Q signal. The STFT is defined as
+X(m, k) =
+
+NFFT
+X−1
+
+x[n + mH] w[n] e−j2πkn/NFFT ,
+
+(1)
+
+n=0
+
+where w[n] is a Hann window of length NFFT = 1024, H = 256 denotes the hop size, m is
+the time-frame index, and k is the frequency bin index. For each RF segment, a fixed duration
+of 0.1s is selected for time-frequency analysis to maintain uniform representation across all
+samples. The magnitude spectrogram is computed as
+S(m, k) = |X(m, k)|,
+
+(2)
+
+and further transformed into the logarithmic domain to enhance the visibility of fine-grained
+spectral structures:
+
+SdB (m, k) = 10 log10 S(m, k)2 + ϵ ,
+(3)
+
+dataset-2
+
+where ϵ is a small constant introduced for numerical stability.
+
+mavic3S_1_hover_c1_u2_d1
+
+mavicair2_mix_mini3pro_c1
+
+mavic3S_mix_mavic3_c1
+
+mavicair2_2_c1
+
+mavicair2_3_c1
+
+dataset-6
+
+dataset-3
+
+mavic3_1_hover_c1_u2_d1
+
+Figure 3: Representative STFT spectrogram samples from the proposed dataset under three acquisition
+scenarios: single-UAV hovering, dual-UAV mixed transmission, and UAV signals mixed with Wi-Fi
+interference.
+
+9
+
+Representative STFT spectrograms are shown in Figure 3. The corresponding time-frequency
+representations exhibit structured spectral patterns across scenarios, with observable differences in spectral occupancy, temporal continuity, and interference structure among distinct
+signal compositions. No abnormal discontinuities or saturation artifacts are observed in the
+analyzed segments.
+
+Flight State Awareness Experiment
+To assess label consistency and class separability, a baseline supervised classification experiment was conducted using dataset-1, which comprises RF signals from eight UAV models
+across 26 fine-grained operational states (c1-c26).
+A convolutional neural network based on the EfficientNetB0 architecture was implemented
+as a reference model. Signal segments were preprocessed and used to train a multi-class classifier for state recognition. The implementation details and source code are publicly available
+at https://doi.org/10.57760/sciencedb.36815.
+The confusion matrix in Figure 4 shows the distribution of predicted labels across the 26
+operational states. The classification results indicate observable correspondence between the
+recorded RF signals and the annotated flight state labels, suggesting the presence of distinguishable RF characteristics in the dataset.
+
+5
+
+Data Availability
+
+The dataset is publicly hosted on the Science Data Bank platform at https://doi.org/
+10.57760/sciencedb.36815 [17], ensuring long-term preservation, accessibility, and
+reproducibility. This dataset is distributed under the CC BY 4.0 license.
+
+6
+
+Code Availability
+
+The signal acquisition program and associated experimental code are publicly available at
+https://doi.org/10.57760/sciencedb.36815
+
+7
+
+Acknowledgements
+
+This work was supported in part by the National Key Research and Development Program of
+China under Grant 2024YFE0200700, in part by National Science Foundation of China (NSFC)
+under Grants 62371131, and in part by Undergraduate Training Programs for Innovation of
+Jiangsu Province.
+
+References
+[1] He, Y., Zhang, J., Xi, R., Na, X., Sun, Y. & Li, B. Detection and identification of noncooperative UAV using a COTS mmWave radar. ACM Trans. Sens. Netw. 20, 44 (2024).
+https://doi.org/10.1145/3638767
+
+10
+
+Figure 4: Confusion matrix for 26 UAV operational states (c1-c26) obtained using a baseline EfficientNetB0 classifier on dataset-1.
+
+[2] Yang, S., Han, H., Liu, Y., Guo, W., Pang, Z. & Zhang, L. Reconfigurable intelligent
+surface-induced randomness for mmWave key generation. In Proc. IEEE ICC 2909–2914
+(2023). https://doi.org/10.1109/ICC45041.2023.10278950
+[3] Yu, N., Mao, S., Zhou, C., Sun, G., Shi, Z. & Chen, J. DroneRFa: A large-scale dataset of
+drone radio frequency signals for detecting low-altitude drones. J. Electron. Inf. Technol.
+46, 1147–1156 (2024). https://doi.org/10.11999/JEIT230570
+[4] Ren, J., Yu, N., Zhou, C., Shi, Z. & Chen, J. DroneRFb-DIR: An RF signal dataset
+for non-cooperative drone individual identification. J. Electron. Inf. Technol. (2025).
+https://doi.org/10.11999/JEIT240804
+[5] Zheng, H., Gao, N., Cai, D., Jin, S. & Matthaiou, M. UAV individual identification via
+distilled RF fingerprints-based LLM in ISAC networks. IEEE Wireless Commun. Lett. 14,
+3769–3773 (2025). https://doi.org/10.1109/LWC.2025.3603423
+[6] Shi, R. et al. RFUAV: A benchmark dataset for unmanned aerial vehicle detection and
+identification. Preprint at https://arxiv.org/abs/2503.09033 (2025).
+
+11
+
+[7] Vuorenmaa, M., Marin, J., Heino, M., Turunen, M. & Riihonen, T.
+Radio-frequency control and video signal recordings of drones. Zenodo
+https://doi.org/10.5281/zenodo.4264467 (2020).
+[8] Al-Sa’d, M. F., Al-Ali, A., Mohamed, A., Khattab, T. & Erbad, A. RF-based drone
+detection and identification using deep learning approaches: An initiative towards a
+large open source drone database. Future Gener. Comput. Syst. 100, 86–97 (2019).
+https://doi.org/10.1016/j.future.2019.05.007
+[9] Irfan, M., Dalai, S., Vishwakarma, K., Trslic, P., Riordan, J. & Dooly, G. Multi-sensor
+fusion for efficient and robust UAV state estimation. In Proc. ICCMA 35–40 (2024).
+https://doi.org/10.1109/ICCMA63715.2024.10843888
+[10] Yang, S., Luo, Y., Miao, W., Ge, C., Sun, W. & Luo, C. RF signal-based UAV detection
+and mode classification: A joint feature engineering generator and multi-channel deep
+neural network approach. Entropy 23, 1678 (2021). https://doi.org/10.3390/e23121678
+[11] Zuo, M., Xie, S., Zhang, X. & Yang, M. Recognition of UAV video signal using RF
+fingerprints in the presence of WiFi interference. IEEE Access 9, 88844–88851 (2021).
+https://doi.org/10.1109/ACCESS.2021.3089590
+[12] Ezuma, M., Erden, F., Anjinappa, C. K., Ozdemir, O. & Guvenc, I. Detection and classification of UAVs using RF fingerprints in the presence of WiFi and Bluetooth interference. IEEE Open J. Commun. Soc. 1, 60–76 (2020).
+https://doi.org/10.1109/OJCOMS.2019.2955889
+[13] Medaiyese, O. O., Ezuma, M., Lauf, A. P. & Adeniran, A. A. Hierarchical learning
+framework for UAV detection and identification. IEEE J. Radio Freq. Identif. 6, 176–188
+(2022). https://doi.org/10.1109/JRFID.2022.3157653
+[14] Medaiyese, O. O., Ezuma, M., Lauf, A. P. & Guvenc, I. Wavelet transform analytics
+for RF-based UAV detection and identification system using machine learning. Pervasive
+Mob. Comput. 82, 101569 (2022). https://doi.org/10.1016/j.pmcj.2022.101569
+[15] Alhazbi, S., Sciancalepore, S. & Oligeri, G. The day-after-tomorrow: On the
+performance of radio fingerprinting over time. In Proc. ACSAC 439–450 (2023).
+https://doi.org/10.1145/3627106.3627192
+[16] He, J., Huang, S., Chang, S., Wang, F., Shen, B.-Z. & Feng, Z. Radio frequency fingerprint identification with hybrid time-varying distortions. IEEE Trans. Wirel. Commun. 22,
+6724–6736 (2023). https://doi.org/10.1109/TWC.2023.3245070
+[17] Zheng, H. & Gao, N. DRFF-R2: Multi-Scenario UAV Radio Frequency Signal Dataset.
+Science Data Bank (2026). https://doi.org/10.57760/sciencedb.36815.
+
+12
+
+

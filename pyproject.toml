@@ -1,0 +1,36 @@
+[project]
+name = "anima-drff-r2"
+version = "0.1.0"
+description = "ANIMA defense module for DRFF-R2 UAV RF dataset indexing, STFT, and baseline classification"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "scipy>=1.11",
+  "typer>=0.12",
+]
+
+[project.optional-dependencies]
+train = [
+  "torch>=2.2",
+  "torchvision>=0.17",
+]
+dev = [
+  "pytest>=8.0",
+]
+
+[project.scripts]
+anima-drff-r2 = "anima_drff_r2.cli:app"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
